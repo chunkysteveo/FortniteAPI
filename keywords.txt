@@ -13,6 +13,7 @@ FortniteAPI	KEYWORD1
 #######################################
 
 sendGetToFortnite	KEYWORD2
+getFortniteServerStatus	KEYWORD2
 getPlayerStatistics	KEYWORD2
 
 #######################################

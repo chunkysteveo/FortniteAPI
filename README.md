@@ -49,7 +49,7 @@ Also available via GitHub if you clone it or download as a ZIP. The downloaded Z
 
      Sketch / include Library / Add .Zip library
 
-You will also have to install the awesome ArduinoJson library written by [Benoît Blanchon](https://github.com/bblanchon). Search **ArduinoJson** on the Arduino Library manager or get it from [here](https://github.com/bblanchon/ArduinoJson).
+You will also have to install the awesome ArduinoJson library written by [Benoît Blanchon](https://github.com/bblanchon). Search **ArduinoJson** on the Arduino Library manager or get it from [here](https://github.com/bblanchon/ArduinoJson). *!v5, not v6 BETA!*
 
 Include Fortnite API in your project:
 
@@ -77,6 +77,8 @@ See the [LICENSE.md](LICENSE.md) file for details
 
 
 ## Release History
+* 1.0.1
+    * Adding basic funciton to check server status, and checking that the tags are working to pull in update on Arduino Library Manager. More endpoints to follow!
 * 1.0.0
     * First release, just getting it out there. Bear with me while I fill it out!
 

@@ -27,10 +27,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 #include <Client.h>
 
 #define FTNAPI_HOST "fortnite-public-api.theapinetwork.com"
-#define USER_AGENT "FortniteAPI/1.0.0 (Arduino)"
+#define USER_AGENT "FortniteAPI/1.0.1 (Arduino)"
 #define FTNAPI_SSL_PORT 443
 #define FTNAPI_TIMEOUT 8000
 
+
+struct serverStatusInfo{
+  String statusFlag;	
+  String statusMessage;	
+  String statusVersion;	
+  long timeUpSince;
+  long timeUpDurationSeconds;
+  String timeUpDurationFormatted;
+};
 
 struct playerStatistics{
   String username;
@@ -53,15 +62,19 @@ class FortniteAPI
   public:
     FortniteAPI (Client &client);
     String sendGetToFortnite(String command);
+    bool getFortniteServerStatus();
     bool getPlayerStatistics(String playerID,String platformID,String windowID);
+    
+    serverStatusInfo serverStatus;
     playerStatistics playerStats;
+
     bool _debug = false;
     int httpStatusCode = 0;
     String httpErrorBody = "";
 
   private:
     Client *_client;
-    const int maxMessageLength = 1000;
+    const int maxMessageLength = 2000;
     void closeClient();
     int extractHttpCode(String statusCode,String body);
 };
