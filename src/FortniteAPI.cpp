@@ -113,9 +113,11 @@ _client->print(String("GET ") + command +
 				}
 			}
 			if (avail) {
-				//Serial.println("Body:");
-				//Serial.println(body);
-				//Serial.println("END");
+				if (_debug){
+					Serial.println("BODY:");
+					Serial.println(body);
+					Serial.println("END");
+				}
 				break;
 			}
 		}
@@ -139,6 +141,45 @@ _client->print(String("GET ") + command +
 	return body;
 }
 
+/**
+ * Server status.
+ * //https://fortnite-public-api.theapinetwork.com/prod09/status/fortnite_server_status
+ * */
+bool FortniteAPI::getFortniteServerStatus(){
+	String command="/prod09/status/fortnite_server_status";
+	String response = sendGetToFortnite(command);       //recieve reply from fortniteapi
+	DynamicJsonBuffer jsonBuffer;
+	JsonObject& root = jsonBuffer.parseObject(response);
+	if(root.success()) {
+		String statusFlag = root["status"];	
+		String statusMessage = root["message"];	
+		String statusVersion = root["version"];	
+		serverStatus.statusFlag = statusFlag;
+		serverStatus.statusMessage = statusMessage;
+		serverStatus.statusVersion = statusVersion;
+
+		if (root.containsKey("time")) {
+			long timeUpSince = root["time"]["since"]["seconds"];
+			long timeUpDurationSeconds = root["time"]["duration"]["seconds"];
+			String timeUpDurationFormatted = root["time"]["duration"]["formated"];
+			
+			serverStatus.timeUpSince = timeUpSince;
+			serverStatus.timeUpDurationSeconds = timeUpDurationSeconds;
+			serverStatus.timeUpDurationFormatted = timeUpDurationFormatted;
+			
+			return true;
+		}
+	}
+	return false;
+} 
+
+/**
+ * Get user stats.
+ * https://fortnite-public-api.theapinetwork.com/prod09/users/public/br_stats
+ * user_id / The user ID of the user
+ * platform / User platform (pc, xb1 or ps4)
+ * window / Window (alltime, season 4 - 5 or current)
+ * */
 bool FortniteAPI::getPlayerStatistics(String playerID,String platformID,String windowID){
 	String command="/prod09/users/public/br_stats?user_id="+playerID+"&platform="+platformID+"&window="+windowID;
 	// Serial.println(command);

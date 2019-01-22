@@ -21,10 +21,6 @@ String user_id_ninja = "4735ce9132924caf8a5b17789b40f79c";  //UID (user ID) of N
 String user_platform = "pc";  //games console platform - available are: pc, xb1, ps4
 String user_stats_window = "alltime";  //timeframe window to get stats from - available are: season4,season5,season6,season7,current,alltime
 
-//WiFiClientSecure client;
-BearSSL::WiFiClientSecure client; //Seem to need this for this connection and ESP8266 core 2.4.2 and above??
-FortniteAPI api(client);
-
 unsigned long api_mtbs = 60000; //mean time between api requests (60 seconds)
 unsigned long api_lasttime = 0;   //last time api request has been done
 
@@ -54,8 +50,6 @@ void setup () {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-
-  client.setInsecure(); //Related to BearSSL(), otherwise we would need to give SSL certificate credentials. API is public with public data, no security issues here.
 }
 
 
@@ -63,10 +57,35 @@ void loop() {
   if (millis() - api_lasttime > api_mtbs || api_lasttime==0) {  //Check if time has expired to go check Fortnite
     if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
 
-      BearSSL::WiFiClientSecure client; //Seem to have to create client on each connection loop
-      client.setInsecure();             //See above about this
+      //WiFiClientSecure client, using BearSSL on ESP8266 core 2.4.2 and above??
+      BearSSL::WiFiClientSecure client; //Seem to need this for this connection and ESP8266 core 2.4.2 and above??
+      client.setInsecure();             //Related to BearSSL(), otherwise we would need to give SSL certificate credentials. API is public with public data, no security issues here.
       FortniteAPI api(client);
-    
+
+      if(api_check.getFortniteServerStatus()){
+        Serial.println("-----SERVER STATUS-----");
+        Serial.print("Status:\t\t\t");
+        Serial.println(api_check.serverStatus.statusFlag);
+        Serial.print("Message:\t\t");
+        Serial.println(api_check.serverStatus.statusMessage);
+        Serial.print("Version:\t\t");
+        Serial.println(api_check.serverStatus.statusVersion);
+        Serial.print("Time up since:\t\t");
+        Serial.println(api_check.serverStatus.timeUpSince);
+        Serial.print("Time up seconds:\t\t");
+        Serial.println(api_check.serverStatus.timeUpDurationSeconds);
+        Serial.print("Time up formatted:\t");
+        Serial.println(api_check.serverStatus.timeUpDurationFormatted);
+        Serial.println("------------------------");
+        Serial.println();
+      }
+      else{
+        Serial.println("-----SERVER DOWN-----");
+      }
+
+      BearSSL::WiFiClientSecure client2;
+      client2.setInsecure();
+      FortniteAPI api(client2);
       long api_timestamp = 0;
       if(api.getPlayerStatistics(user_id_ninja,user_platform,user_stats_window)){
         Serial.print("------Player Stats (Totals) ");

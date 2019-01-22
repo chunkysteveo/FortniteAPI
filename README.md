@@ -77,6 +77,8 @@ See the [LICENSE.md](LICENSE.md) file for details
 
 
 ## Release History
+* 1.0.1
+    * Adding basic funciton to check server status, and checking that the tags are working to pull in update on Arduino Library Manager. More endpoints to follow!
 * 1.0.0
     * First release, just getting it out there. Bear with me while I fill it out!
 
