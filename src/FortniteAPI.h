@@ -61,7 +61,7 @@ class FortniteAPI
 
   private:
     Client *_client;
-    const int maxMessageLength = 1000;
+    const int maxMessageLength = 2000;
     void closeClient();
     int extractHttpCode(String statusCode,String body);
 };
